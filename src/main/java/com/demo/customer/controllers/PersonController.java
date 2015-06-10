@@ -2,6 +2,7 @@ package com.demo.customer.controllers;
 
 import com.demo.customer.domain.Person;
 import com.demo.customer.services.PersonRepository;
+import com.demo.customer.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,9 @@ public class PersonController {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private PersonService personService;
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
@@ -53,7 +58,7 @@ public class PersonController {
 
     //add a person
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(method = RequestMethod.PUT, headers = {"Accept=application/json", "Content-type=application/json"} , consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, headers = {"Accept=application/json", "Content-type=application/json"} , consumes = "application/json")
     public Person create(@RequestBody Person person,  HttpServletResponse response)  {
         Person p = personRepository.save(person);
         response.setHeader("Location", "/person/"+ p.getId());
@@ -61,5 +66,23 @@ public class PersonController {
         return p;
     }
 
+    @RequestMapping(value="findperson/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Person getRestPerson(@PathVariable long id) {
+        Person person = personService.getPerson(id);
+
+        return  person;
+    }
+
+    @RequestMapping(value="{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE )
+    @ResponseStatus(HttpStatus.OK)
+    public Person updatePerson(@PathVariable("id") Person person, @RequestBody Person newPerson) {
+        if(person!=null && personRepository.exists(person.getId() ) ){
+            person.setName(newPerson.getName());
+            person.setLastName(newPerson.getLastName());
+            person = personRepository.save(person);
+        }
+
+        return person;
+    }
 
 }

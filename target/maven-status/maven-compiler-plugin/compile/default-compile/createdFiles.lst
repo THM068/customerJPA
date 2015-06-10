@@ -3,6 +3,7 @@ com\demo\customer\config\Bootstrap.class
 com\demo\customer\services\PersonRepository.class
 com\demo\customer\DemoApplication.class
 com\demo\customer\services\BookmarkRepository.class
+com\demo\customer\services\PersonService.class
 com\demo\customer\services\CustomerRepository.class
 com\demo\customer\controllers\PersonController.class
 com\demo\customer\domain\Account.class
@@ -10,4 +11,5 @@ com\demo\customer\domain\Customer.class
 com\demo\customer\domain\Person.class
 com\demo\customer\config\DatabaseConfig.class
 com\demo\customer\domain\Bookmark.class
+com\demo\customer\util\CONS.class
 com\demo\customer\controllers\AccountController.class
